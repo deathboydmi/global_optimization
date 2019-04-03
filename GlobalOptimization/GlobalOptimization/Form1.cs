@@ -23,11 +23,26 @@ namespace GlobalOptimization
         private double param_method;
         private double[] x_list;
         private double[] y_list;
-        private Tuple<double, double> result;
+        private struct Result
+        {
+            public double min_x;
+            public double min_y;
+            public double accuracy;
+            public int stop_iteration;
+            public string method;
+            public override string ToString()
+            {
+                string str_res = method + ":" + Environment.NewLine +
+                    "optim value: " + min_y.ToString() + ";" + Environment.NewLine
+                    + "stop iteration: " + stop_iteration.ToString() + ";" + Environment.NewLine
+                    + "accuracy: " + accuracy.ToString();
+                return str_res;
+            }
+        }
+        private Result result;
         public Form1()
         {
             InitializeComponent();
-            result = new Tuple<double, double>(0, 0);
             initialize_plot_parameters();
             initialize_method_parameters();
         }
@@ -42,13 +57,21 @@ namespace GlobalOptimization
         }
         private void initialize_method_parameters()
         {
+
             num_of_iterations = int.Parse(iterations_textBox.Text);
             accuracy = double.Parse(accuracy_textBox.Text, System.Globalization.CultureInfo.InvariantCulture);
             param_method = double.Parse(method_param_textBox.Text, System.Globalization.CultureInfo.InvariantCulture);
         }
         private void plot_button_Click(object sender, EventArgs e)
         {
-            initialize_plot_parameters();
+            try
+            {
+                initialize_plot_parameters();
+            }
+            catch (System.FormatException)
+            {
+                return;
+            }
             plot_function();
         }
 
@@ -72,40 +95,42 @@ namespace GlobalOptimization
             plot_chart.Series[0].Points.AddXY(right_range_x, function(right_range_x));
         }
 
-        private Tuple<double, double> brute_force_method()
+        private Result brute_force_method()
         {
-            points_chart.ChartAreas[0].AxisX.Maximum = right_range_x;
-            points_chart.ChartAreas[0].AxisX.Minimum = left_range_x;
+            points_chart.ChartAreas[0].AxisX.Maximum = plot_chart.ChartAreas[0].AxisX.Maximum;
+            points_chart.ChartAreas[0].AxisX.Minimum = plot_chart.ChartAreas[0].AxisX.Minimum;
             points_chart.Series[0].Points.Clear();
             points_chart.Series[0].Points.AddXY(left_range_x, 10);
             points_chart.Series[0].Points.AddXY(right_range_x, 10);
             double x = left_range_x;
             double y = function(x);
-            double min_y = y, min_x = x;
+            result.min_x = x;
+            result.min_y = y;
+            result.stop_iteration = 0;
             if (y > function(right_range_x))
             {
-                min_y = function(right_range_x);
-                min_x = right_range_x;
+                result.min_y = function(right_range_x);
+                result.min_x = right_range_x;
             }
-            double step = (right_range_x - left_range_x) / num_of_iterations;
-            if (step < accuracy)
-                step = accuracy;
-            x += step;
+            result.accuracy = (right_range_x - left_range_x) / num_of_iterations;
+            if (result.accuracy < accuracy)
+                result.accuracy = accuracy;
+            x += result.accuracy;
             while (x < right_range_x)
             {
                 points_chart.Series[0].Points.AddXY(x, 10);
                 y = function(x);
-                if (y < min_y)
+                if (y < result.min_y)
                 {
-                    min_y = y;
-                    min_x = x;
+                    result.min_y = y;
+                    result.min_x = x;
                 }
-                x += step;
+                result.stop_iteration++;
+                x += result.accuracy;
             }
-            result = new Tuple<double, double>(min_x, min_y);
             return result;
         }
-        private Tuple<double, double> piyavsky_method()
+        private Result piyavsky_method()
         {
             points_chart.ChartAreas[0].AxisX.Maximum = right_range_x;
             points_chart.ChartAreas[0].AxisX.Minimum = left_range_x;
@@ -114,16 +139,16 @@ namespace GlobalOptimization
             points_chart.Series[1].Points.AddXY(right_range_x, 2);
             double x = left_range_x;
             double y = function(x);
-            double min_y = y, min_x = x;
+            result.min_y = y;
+            result.min_x = x;
             if (y > function(right_range_x))
             {
-                min_y = function(right_range_x);
-                min_x = right_range_x;
+                result.min_y = function(right_range_x);
+                result.min_x = right_range_x;
             }
-            result = new Tuple<double, double>(min_x, min_y);
             return result;
         }
-        private Tuple<double, double> strongin_method()
+        private Result strongin_method()
         {
             points_chart.ChartAreas[0].AxisX.Maximum = right_range_x;
             points_chart.ChartAreas[0].AxisX.Minimum = left_range_x;
@@ -132,26 +157,35 @@ namespace GlobalOptimization
             points_chart.Series[2].Points.AddXY(right_range_x, 2);
             double x = left_range_x;
             double y = function(x);
-            double min_y = y, min_x = x;
+            result.min_y = y;
+            result.min_x = x;
             if (y > function(right_range_x))
             {
-                min_y = function(right_range_x);
-                min_x = right_range_x;
+                result.min_y = function(right_range_x);
+                result.min_x = right_range_x;
             }
-            result = new Tuple<double, double>(min_x, min_y);
             return result;
         }
 
 
         private void run_button_Click(object sender, EventArgs e)
         {
-            initialize_plot_parameters();
-            initialize_method_parameters();
+            try
+            {
+                initialize_plot_parameters();
+                initialize_method_parameters();
+            }
+            catch (System.FormatException)
+            {
+                return;
+            }
             plot_function();
             if (trivial_radioButton.Checked)
             {
+                result.method = "Brute force method";
                 brute_force_method();
-                result_label.Text = result.Item2.ToString();
+                result_textBox.AppendText(result.ToString());
+                result_textBox.AppendText(Environment.NewLine);
             }
             else if (piyavsky_radioButton.Checked)
             {

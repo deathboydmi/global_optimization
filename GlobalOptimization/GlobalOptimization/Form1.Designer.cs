@@ -28,14 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series6 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series7 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series8 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.plot_chart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.points_chart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.label3 = new System.Windows.Forms.Label();
@@ -66,8 +66,7 @@
             this.iterations_textBox = new System.Windows.Forms.TextBox();
             this.run_button = new System.Windows.Forms.Button();
             this.cancel_button = new System.Windows.Forms.Button();
-            this.label11 = new System.Windows.Forms.Label();
-            this.result_label = new System.Windows.Forms.Label();
+            this.result_textBox = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.plot_chart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.points_chart)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -77,47 +76,47 @@
             // 
             // plot_chart
             // 
-            chartArea1.Name = "ChartArea1";
-            this.plot_chart.ChartAreas.Add(chartArea1);
-            legend1.Name = "Legend1";
-            this.plot_chart.Legends.Add(legend1);
+            chartArea3.Name = "ChartArea1";
+            this.plot_chart.ChartAreas.Add(chartArea3);
+            legend3.Name = "Legend1";
+            this.plot_chart.Legends.Add(legend3);
             this.plot_chart.Location = new System.Drawing.Point(448, 12);
             this.plot_chart.Name = "plot_chart";
             this.plot_chart.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.SeaGreen;
-            series1.ChartArea = "ChartArea1";
-            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
-            series1.Legend = "Legend1";
-            series1.MarkerColor = System.Drawing.Color.White;
-            series1.Name = "function ";
-            this.plot_chart.Series.Add(series1);
-            this.plot_chart.Size = new System.Drawing.Size(641, 454);
+            series5.ChartArea = "ChartArea1";
+            series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
+            series5.Legend = "Legend1";
+            series5.MarkerColor = System.Drawing.Color.White;
+            series5.Name = "function ";
+            this.plot_chart.Series.Add(series5);
+            this.plot_chart.Size = new System.Drawing.Size(641, 516);
             this.plot_chart.TabIndex = 0;
             this.plot_chart.Text = "chart1";
             // 
             // points_chart
             // 
-            chartArea2.Name = "ChartArea1";
-            this.points_chart.ChartAreas.Add(chartArea2);
-            legend2.Name = "Legend1";
-            this.points_chart.Legends.Add(legend2);
-            this.points_chart.Location = new System.Drawing.Point(448, 472);
+            chartArea4.Name = "ChartArea1";
+            this.points_chart.ChartAreas.Add(chartArea4);
+            legend4.Name = "Legend1";
+            this.points_chart.Legends.Add(legend4);
+            this.points_chart.Location = new System.Drawing.Point(448, 534);
             this.points_chart.Name = "points_chart";
             this.points_chart.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.SemiTransparent;
-            series2.ChartArea = "ChartArea1";
-            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
-            series2.Legend = "Legend1";
-            series2.Name = "trivial";
-            series3.ChartArea = "ChartArea1";
-            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
-            series3.Legend = "Legend1";
-            series3.Name = "Pitavsky";
-            series4.ChartArea = "ChartArea1";
-            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
-            series4.Legend = "Legend1";
-            series4.Name = "Strongin";
-            this.points_chart.Series.Add(series2);
-            this.points_chart.Series.Add(series3);
-            this.points_chart.Series.Add(series4);
+            series6.ChartArea = "ChartArea1";
+            series6.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series6.Legend = "Legend1";
+            series6.Name = "trivial";
+            series7.ChartArea = "ChartArea1";
+            series7.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series7.Legend = "Legend1";
+            series7.Name = "Pitavsky";
+            series8.ChartArea = "ChartArea1";
+            series8.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series8.Legend = "Legend1";
+            series8.Name = "Strongin";
+            this.points_chart.Series.Add(series6);
+            this.points_chart.Series.Add(series7);
+            this.points_chart.Series.Add(series8);
             this.points_chart.Size = new System.Drawing.Size(641, 177);
             this.points_chart.TabIndex = 1;
             this.points_chart.Text = "chart2";
@@ -249,11 +248,13 @@
             // trivial_radioButton
             // 
             this.trivial_radioButton.AutoSize = true;
+            this.trivial_radioButton.Checked = true;
             this.trivial_radioButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.trivial_radioButton.Location = new System.Drawing.Point(48, 28);
             this.trivial_radioButton.Name = "trivial_radioButton";
             this.trivial_radioButton.Size = new System.Drawing.Size(188, 28);
             this.trivial_radioButton.TabIndex = 20;
+            this.trivial_radioButton.TabStop = true;
             this.trivial_radioButton.Text = "Brute force method";
             this.trivial_radioButton.UseVisualStyleBackColor = true;
             // 
@@ -263,7 +264,7 @@
             this.groupBox1.Controls.Add(this.piyavsky_radioButton);
             this.groupBox1.Controls.Add(this.trivial_radioButton);
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.groupBox1.Location = new System.Drawing.Point(12, 268);
+            this.groupBox1.Location = new System.Drawing.Point(12, 257);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(430, 137);
             this.groupBox1.TabIndex = 22;
@@ -273,13 +274,11 @@
             // strongin_radioButton
             // 
             this.strongin_radioButton.AutoSize = true;
-            this.strongin_radioButton.Checked = true;
             this.strongin_radioButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.strongin_radioButton.Location = new System.Drawing.Point(48, 96);
             this.strongin_radioButton.Name = "strongin_radioButton";
             this.strongin_radioButton.Size = new System.Drawing.Size(167, 28);
             this.strongin_radioButton.TabIndex = 22;
-            this.strongin_radioButton.TabStop = true;
             this.strongin_radioButton.Text = "Strongin method";
             this.strongin_radioButton.UseVisualStyleBackColor = true;
             // 
@@ -313,17 +312,17 @@
             this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.groupBox2.Location = new System.Drawing.Point(12, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(430, 250);
+            this.groupBox2.Size = new System.Drawing.Size(430, 239);
             this.groupBox2.TabIndex = 21;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Function: α*sin(β*x)+γ*cos(δ*x)";
             // 
             // plot_button
             // 
-            this.plot_button.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.plot_button.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.plot_button.Location = new System.Drawing.Point(48, 208);
             this.plot_button.Name = "plot_button";
-            this.plot_button.Size = new System.Drawing.Size(112, 33);
+            this.plot_button.Size = new System.Drawing.Size(100, 25);
             this.plot_button.TabIndex = 28;
             this.plot_button.Text = "Plot";
             this.plot_button.UseVisualStyleBackColor = true;
@@ -338,7 +337,7 @@
             this.groupBox3.Controls.Add(this.label1);
             this.groupBox3.Controls.Add(this.iterations_textBox);
             this.groupBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F);
-            this.groupBox3.Location = new System.Drawing.Point(12, 411);
+            this.groupBox3.Location = new System.Drawing.Point(12, 400);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(430, 141);
             this.groupBox3.TabIndex = 23;
@@ -404,10 +403,10 @@
             // 
             // run_button
             // 
-            this.run_button.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.run_button.Location = new System.Drawing.Point(12, 558);
+            this.run_button.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.run_button.Location = new System.Drawing.Point(12, 547);
             this.run_button.Name = "run_button";
-            this.run_button.Size = new System.Drawing.Size(112, 33);
+            this.run_button.Size = new System.Drawing.Size(100, 25);
             this.run_button.TabIndex = 24;
             this.run_button.Text = "Run";
             this.run_button.UseVisualStyleBackColor = true;
@@ -415,41 +414,29 @@
             // 
             // cancel_button
             // 
-            this.cancel_button.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.cancel_button.Location = new System.Drawing.Point(130, 558);
+            this.cancel_button.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.cancel_button.Location = new System.Drawing.Point(118, 547);
             this.cancel_button.Name = "cancel_button";
-            this.cancel_button.Size = new System.Drawing.Size(112, 33);
+            this.cancel_button.Size = new System.Drawing.Size(100, 25);
             this.cancel_button.TabIndex = 25;
             this.cancel_button.Text = "Cancel";
             this.cancel_button.UseVisualStyleBackColor = true;
             // 
-            // label11
+            // result_textBox
             // 
-            this.label11.AutoSize = true;
-            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label11.Location = new System.Drawing.Point(8, 594);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(74, 24);
-            this.label11.TabIndex = 26;
-            this.label11.Text = "Result:";
-            // 
-            // result_label
-            // 
-            this.result_label.AutoSize = true;
-            this.result_label.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.result_label.Location = new System.Drawing.Point(88, 594);
-            this.result_label.Name = "result_label";
-            this.result_label.Size = new System.Drawing.Size(142, 24);
-            this.result_label.TabIndex = 27;
-            this.result_label.Text = "...some_result...";
+            this.result_textBox.Location = new System.Drawing.Point(12, 578);
+            this.result_textBox.Multiline = true;
+            this.result_textBox.Name = "result_textBox";
+            this.result_textBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.result_textBox.Size = new System.Drawing.Size(430, 133);
+            this.result_textBox.TabIndex = 26;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1101, 661);
-            this.Controls.Add(this.result_label);
-            this.Controls.Add(this.label11);
+            this.ClientSize = new System.Drawing.Size(1101, 723);
+            this.Controls.Add(this.result_textBox);
             this.Controls.Add(this.cancel_button);
             this.Controls.Add(this.run_button);
             this.Controls.Add(this.groupBox3);
@@ -505,10 +492,8 @@
         private System.Windows.Forms.TextBox iterations_textBox;
         private System.Windows.Forms.Button run_button;
         private System.Windows.Forms.Button cancel_button;
-        private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.Label result_label;
         private System.Windows.Forms.Button plot_button;
-
+        private System.Windows.Forms.TextBox result_textBox;
     }
 }
 
