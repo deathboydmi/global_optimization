@@ -180,6 +180,7 @@ public:
 		function = _func;
 		M = _M;
 	}
+	
 	~TMethodOfPiyavsky() { }
 
 	virtual TPoint CalculateOptimum()
