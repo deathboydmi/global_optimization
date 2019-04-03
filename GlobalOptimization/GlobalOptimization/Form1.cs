@@ -109,7 +109,7 @@ namespace GlobalOptimization
             plot_function();
         }
 
-        private double function(double x)
+        public double function(double x)
         {
             return (alpha*Math.Sin(betta*x)+gamma*Math.Cos(delta*x));
         }
@@ -172,20 +172,81 @@ namespace GlobalOptimization
 
         private Result piyavsky_method()
         {
-            points_chart.ChartAreas[0].AxisX.Maximum = right_range_x;
-            points_chart.ChartAreas[0].AxisX.Minimum = left_range_x;
-            points_chart.Series[1].Points.Clear();
-            points_chart.Series[1].Points.AddXY(left_range_x, 2);
-            points_chart.Series[1].Points.AddXY(right_range_x, 2);
-            double x = left_range_x;
-            double y = function(x);
-            result.min_y = y;
-            result.min_x = x;
-            if (y > function(right_range_x))
+            double currArgValue = 0.0;
+            double prevArgValue = 0.0;
+            double currFuncValue = 0.0;
+            double mParam = 1;
+            double rParam = param_method;
+            result.stop_iteration = 0;
+
+            List<double> points = new List<double>();
+            List<double> funcValues = new List<double>();
+            List<double> characteristics = new List<double>();
+
+            funcValues.Add(function(left_range_x));
+            funcValues.Add(function(right_range_x));
+
+            do
             {
-                result.min_y = function(right_range_x);
-                result.min_x = right_range_x;
-            }
+                characteristics.Clear();
+                funcValues.Clear();
+                List<double> p = new List<double>();
+
+                for (int it = 0; it < points.Count; ++it)
+                    p.Add(points[it]);
+
+                for (int i = 0; i < p.Count; i++)
+                    funcValues.Add(function(p[i]));
+
+                for (int i = 0; i < points.Count - 1; i++)
+                {
+                    p.Clear();
+
+                    for (int it = 0; it != points.Count; ++it)
+                        p.Add(points[it]);
+
+                    double M = 0.0;
+
+                    for (int j = 0; j < points.Count - 1; ++j)
+                    {
+                        double deltaZ = Math.Abs(funcValues[j + 1] - funcValues[j]);
+                        double deltaX = p[j + 1] - p[j];
+                        double newM = deltaZ / deltaX;
+
+                        if (newM > M)
+                            M = newM;
+                    }
+                    mParam = M > 0 ? rParam * M : 1;
+                    double r = 0.5 * (mParam * (p[i + 1] - p[i]) - funcValues[i + 1] - funcValues[i]);
+                    characteristics.Add(r);
+                }
+
+                prevArgValue = currArgValue;
+
+                p.Clear();
+
+                int index = 0;
+
+                for (int i = 0; i < characteristics.Count; i++)
+                {
+                    if (characteristics[i] > characteristics[index])
+                        index = i;
+                }
+
+                for (int it =0; it < points.Count; ++it)
+                    p.Add(points[it]);
+
+                currArgValue = 0.5 * (p[index + 1] + p[index] - (funcValues[index + 1] - funcValues[index]) / mParam);
+
+                points.Add(currArgValue);
+                points.Sort();
+
+                result.stop_iteration++;
+                result.accuracy = Math.Abs(currArgValue - prevArgValue);
+            } while (result.accuracy > accuracy && result.stop_iteration < num_of_iterations);
+
+
+
             return result;
         }
 
@@ -262,7 +323,7 @@ namespace GlobalOptimization
                            - 0.5 * (points_list[maxIR].y - points_list[maxIR - 1].y) / m;
                 newPoint.y = function(newPoint.x);
                 points_list.Add(newPoint);
-                points_chart.Series[2].Points.AddXY(newPoint.x, 6);
+                points_chart.Series[2].Points.AddXY(newPoint.x, 2);
 
                 if (newPoint.y < result.min_y)
                 {

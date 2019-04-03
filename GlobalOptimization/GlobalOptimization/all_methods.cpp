@@ -1,6 +1,6 @@
 #pragma once
 #include <iostream>
-#include <vector>
+#inclList>
 #include <map>
 #include "IMethod.h"
 
@@ -36,14 +36,14 @@ public:
 	virtual void RenewSearchData(double _x)
 	{
 		double _y = function(_x);
-		TPoint tmp;
+		Point tmp;
 		tmp.x = _x; tmp.y = _y;
 		pData->insert(tmp, root);
 	}
 
-	virtual TPoint CalculateOptimum()
+	virtual Point CalculateOptimum()
 	{
-		TPoint result;
+		Point result;
 		double m = 1;
 		double maxM = 0;
 		double* M = new double[pTask->maxOfIterations];
@@ -135,7 +135,7 @@ protected:
 	{
 		return 0.5*M*(RB - LB) - 0.5*(function(RB) + function(LB));
 	}
-	void updateOptimum(TPoint& CheckingPoint, TPoint& Optimum)
+	void updateOptimum(Point& CheckingPoint, Point& Optimum)
 	{
 		if (CheckingPoint.y < Optimum.y)
 		{
@@ -143,14 +143,14 @@ protected:
 			Optimum.y = CheckingPoint.y;
 		}
 	}
-	TPoint& makePoint(double x)
+	Point& makePoint(double x)
 	{
-		TPoint tp;
+		Point tp;
 		tp.x = x;
 		tp.y = function(x);
 		return tp;
 	}
-	void insertPointInData(std::vector<double>& Data, double x)
+	void insertPointInData(List<double>& Data, double x)
 	{
 		int j = 0;
 		while (x > Data[j] && j<Data.size() - 1)
@@ -161,7 +161,7 @@ protected:
 	virtual void RenewSearchData(double _x)
 	{
 		double _y = function(_x);
-		TPoint tmp;
+		Point tmp;
 		tmp.x = _x; tmp.y = _y;
 		pData->insert(tmp, root);
 	}
@@ -183,18 +183,18 @@ public:
 
 	~TMethodOfPiyavsky() { }
 
-	virtual TPoint CalculateOptimum()
+	virtual Point CalculateOptimum()
 	{
-		TPoint result;
-		TPoint currPoint;
-		std::vector<double> x;
-		int Iterations = pTask->maxOfIterations;
+		Point result;
+		Point currPoint;
+		List<double> x = new List();
+		int Iterations = num_of_iterations;
 		double currentChara = 0;
 		double currentPoint = 0;
 
-		x.push_back(pTask->xl);
-		result = makePoint(pTask->xl);
-		x.push_back(pTask->xr);
+		x.Add(pTask->xl);
+		result = new makePoint(pTask->xl);
+		x.Add(pTask->xr);
 		currPoint = makePoint(pTask->xr);
 		updateOptimum(currPoint, result);
 
@@ -258,7 +258,7 @@ void methodGSA()
             y = p.y;
         }
     };
-	std::vector<Point> points;
+	List<Point> points;
 	double R;
 	double maxR = 0;
 	int maxIR = 0;
@@ -270,7 +270,7 @@ void methodGSA()
 
 	left_point.x = left_range_x; right_point.x = right_range_x;
     left_point.y = f(left_point.x); right_point.y = f(right_point.x);
-    points.push_back(left_point); points.push_back(right_point);
+    points.Add(left_point); points.Add(right_point);
 
     minPoint = (left_point.y < right_point.y) ? left_point : right_point;
 
@@ -317,7 +317,7 @@ void methodGSA()
         newPoint.x = 0.5 * (points[maxIR].x + points[maxIR - 1].x)
                    - 0.5 * (points[maxIR].y - points[maxIR - 1].y) / m;
         newPoint.y = f(newPoint.x);
-        points.push_back(newPoint);
+        points.Add(newPoint);
 
         minPoint = (newPoint.y < minPoint.y) ? newPoint : minPoint;
 	}
@@ -330,3 +330,4 @@ void methodGSA()
     answer.minX = minPoint.x;
     answer.minY = minPoint.y;
 }
+

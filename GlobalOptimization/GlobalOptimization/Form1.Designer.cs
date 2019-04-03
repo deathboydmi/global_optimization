@@ -110,7 +110,7 @@
             series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
             series3.Legend = "Legend1";
             series3.MarkerSize = 7;
-            series3.Name = "Pitavsky";
+            series3.Name = "Piyavsky";
             series4.ChartArea = "ChartArea1";
             series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
             series4.Legend = "Legend1";
