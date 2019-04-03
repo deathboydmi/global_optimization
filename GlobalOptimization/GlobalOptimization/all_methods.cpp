@@ -180,7 +180,7 @@ public:
 		function = _func;
 		M = _M;
 	}
-	
+
 	~TMethodOfPiyavsky() { }
 
 	virtual TPoint CalculateOptimum()
@@ -235,3 +235,98 @@ public:
 		return result;
 	}
 };
+
+void methodGSA()
+{
+	const double left_range_x = task.left_border;
+	const double right_range_x = task.right_border;
+    double eps = task.eps;
+	int k = task.num_iter;
+
+    const double r = 3;
+	double m = 1;
+	double maxM = 0;
+	double M;
+
+    struct Point
+    {
+        double x;
+        double y;
+        void operator=(const Point& p)
+        {
+            x = p.x;
+            y = p.y;
+        }
+    };
+	std::vector<Point> points;
+	double R;
+	double maxR = 0;
+	int maxIR = 0;
+
+	Point minPoint;
+    Point left_point, right_point;
+
+    auto start_time = omp_get_wtime();
+
+	left_point.x = left_range_x; right_point.x = right_range_x;
+    left_point.y = f(left_point.x); right_point.y = f(right_point.x);
+    points.push_back(left_point); points.push_back(right_point);
+
+    minPoint = (left_point.y < right_point.y) ? left_point : right_point;
+
+	for (int i = 1; i < k - 1; ++i)
+	{
+        std::sort(points.begin(), points.end(), [](const Point& a, const Point& b) {
+            return a.x < b.x;
+        });
+
+		for (int j = 1; j <= i; ++j)
+		{
+			M = (fabs(points[j].y - points[j - 1].y)) / (points[j].x - points [j - 1].x);
+			if (M > maxM)
+			{
+				maxM = M;
+			}
+		}
+
+		if (maxM > 0)
+		{
+			m = r * maxM;
+		}
+
+		maxR = 0;
+		maxIR = 1;
+		for (int j = 1; j <= i; ++j)
+		{
+			R = m * (points[j].x - points[j - 1].x) + (pow((points[j].y - points[j - 1].y), 2))
+				/ (m * (points[j].x - points[j - 1].x)) - 2 * (points[j].y + points[j - 1].y);
+
+			if (R > maxR)
+			{
+				maxR = R;
+				maxIR = j;
+			}
+		}
+
+		if (fabs(points[maxIR].x - points[maxIR - 1].x) < eps)
+		{
+			break;
+		}
+
+        Point newPoint;
+        newPoint.x = 0.5 * (points[maxIR].x + points[maxIR - 1].x)
+                   - 0.5 * (points[maxIR].y - points[maxIR - 1].y) / m;
+        newPoint.y = f(newPoint.x);
+        points.push_back(newPoint);
+
+        minPoint = (newPoint.y < minPoint.y) ? newPoint : minPoint;
+	}
+
+    auto finish_time = omp_get_wtime();
+    std::cout << "\n\tReport:" << std::endl;
+    std::cout << "Number of iterations: "<< num_iter << std::endl;
+    std::cout << "Time of working: "<< finish_time - start_time << "\n" << std::endl;
+
+    answer.minX = minPoint.x;
+    answer.minY = minPoint.y;
+}

@@ -21,8 +21,6 @@ namespace GlobalOptimization
         private int num_of_iterations;
         private double accuracy;
         private double param_method;
-        private double[] x_list;
-        private double[] y_list;
         private struct Result
         {
             public double min_x;
@@ -40,6 +38,42 @@ namespace GlobalOptimization
             }
         }
         private Result result;
+        private class Point
+        {
+            public double x;
+            public double y;
+            public Point()
+            {
+                x = 0;
+                y = 0;
+            }
+            public Point(double _x, double _y)
+            {
+                x = _x;
+                y = _y;
+            }
+            public Point(Point _p)
+            {
+                x = _p.x;
+                y = _p.y;
+            }
+            public static bool operator > (Point left, Point right)
+            {
+                return (left.y > right.y);
+            }
+            public static bool operator < (Point left, Point right)
+            {
+                return (left.y < right.y);
+            }
+            public static bool operator <= (Point left, Point right)
+            {
+                return (left.y <= right.y);
+            }
+            public static bool operator >= (Point left, Point right)
+            {
+                return (left.y >= right.y);
+            }
+        }
         public Form1()
         {
             InitializeComponent();
@@ -95,6 +129,8 @@ namespace GlobalOptimization
             plot_chart.Series[0].Points.AddXY(right_range_x, function(right_range_x));
         }
 
+        //------------------------------------------------------------------------------------
+        // Brute force Method
         private Result brute_force_method()
         {
             points_chart.ChartAreas[0].AxisX.Maximum = plot_chart.ChartAreas[0].AxisX.Maximum;
@@ -130,6 +166,10 @@ namespace GlobalOptimization
             }
             return result;
         }
+
+        //------------------------------------------------------------------------------------
+        // Piyavsky Method
+
         private Result piyavsky_method()
         {
             points_chart.ChartAreas[0].AxisX.Maximum = right_range_x;
@@ -148,6 +188,9 @@ namespace GlobalOptimization
             }
             return result;
         }
+
+        //------------------------------------------------------------------------------------
+        // Strongin Method
         private Result strongin_method()
         {
             points_chart.ChartAreas[0].AxisX.Maximum = right_range_x;
@@ -155,15 +198,80 @@ namespace GlobalOptimization
             points_chart.Series[2].Points.Clear();
             points_chart.Series[2].Points.AddXY(left_range_x, 2);
             points_chart.Series[2].Points.AddXY(right_range_x, 2);
-            double x = left_range_x;
-            double y = function(x);
-            result.min_y = y;
-            result.min_x = x;
-            if (y > function(right_range_x))
+
+            List<Point> points_list = new List<Point>();
+            double r = param_method;
+            double m = 1, maxM = 0, M;
+
+            double R, maxR = 0;
+            int maxIR = 0;
+
+            Point left_range_point = new Point(left_range_x, function(left_range_x));
+            Point right_range_point = new Point(right_range_x, function(right_range_x));
+            points_list.Add(left_range_point);
+            points_list.Add(right_range_point);
+
+            result.min_y = left_range_point.y;
+            result.min_x = left_range_point.x;
+            if (left_range_point.y > right_range_point.y)
             {
-                result.min_y = function(right_range_x);
-                result.min_x = right_range_x;
+                result.min_y = right_range_point.y;
+                result.min_x = right_range_point.x;
             }
+
+            for (int i = 1; i < num_of_iterations - 1; ++i)
+            {
+                points_list.Sort((left, right) => left.x.CompareTo(right.x));
+
+                for (int j = 1; j <= i; ++j)
+                {
+                    M = (Math.Abs(points_list[j].y - points_list[j - 1].y)) / (points_list[j].x - points_list[j - 1].x);
+                    if (M > maxM)
+                    {
+                        maxM = M;
+                    }
+                }
+
+                if (maxM > 0)
+                {
+                    m = r * maxM;
+                }
+
+                maxR = 0;
+                maxIR = 1;
+                for (int j = 1; j <= i; ++j)
+                {
+                    R = m * (points_list[j].x - points_list[j - 1].x) + (Math.Pow((points_list[j].y - points_list[j - 1].y), 2))
+                        / (m * (points_list[j].x - points_list[j - 1].x)) - 2 * (points_list[j].y + points_list[j - 1].y);
+
+                    if (R > maxR)
+                    {
+                        maxR = R;
+                        maxIR = j;
+                    }
+                }
+
+                result.accuracy = Math.Abs(points_list[maxIR].x - points_list[maxIR - 1].x);
+                if (result.accuracy < accuracy)
+                {
+                    break;
+                }
+
+                Point newPoint = new Point();
+                newPoint.x = 0.5 * (points_list[maxIR].x + points_list[maxIR - 1].x)
+                           - 0.5 * (points_list[maxIR].y - points_list[maxIR - 1].y) / m;
+                newPoint.y = function(newPoint.x);
+                points_list.Add(newPoint);
+                points_chart.Series[2].Points.AddXY(newPoint.x, 6);
+
+                if (newPoint.y < result.min_y)
+                {
+                    result.min_y = newPoint.y;
+                    result.min_x = newPoint.x;
+                }
+                result.stop_iteration = i;
+            }
+
             return result;
         }
 
@@ -189,15 +297,19 @@ namespace GlobalOptimization
             }
             else if (piyavsky_radioButton.Checked)
             {
-                x_list = new double[num_of_iterations + 2];
-                y_list = new double[num_of_iterations + 2];
+                result.method = "Piyavsky method";
+               
                 piyavsky_method();
+                result_textBox.AppendText(result.ToString());
+                result_textBox.AppendText(Environment.NewLine);
             }
             else if (strongin_radioButton.Checked)
             {
-                x_list = new double[num_of_iterations + 2];
-                y_list = new double[num_of_iterations + 2];
+                result.method = "Strongin method";
+               
                 strongin_method();
+                result_textBox.AppendText(result.ToString());
+                result_textBox.AppendText(Environment.NewLine);
             }
         }
     }
