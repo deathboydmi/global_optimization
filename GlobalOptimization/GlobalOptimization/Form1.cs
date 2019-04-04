@@ -172,80 +172,83 @@ namespace GlobalOptimization
 
         private Result piyavsky_method()
         {
-            double currArgValue = 0.0;
-            double prevArgValue = 0.0;
-            double currFuncValue = 0.0;
-            double mParam = 1;
-            double rParam = param_method;
-            result.stop_iteration = 0;
+            points_chart.ChartAreas[0].AxisX.Maximum = right_range_x;
+            points_chart.ChartAreas[0].AxisX.Minimum = left_range_x;
+            points_chart.Series[1].Points.Clear();
+            points_chart.Series[1].Points.AddXY(left_range_x, 6);
+            points_chart.Series[1].Points.AddXY(right_range_x, 6);
 
-            List<double> points = new List<double>();
-            List<double> funcValues = new List<double>();
-            List<double> characteristics = new List<double>();
+            List<Point> points_list = new List<Point>();
+            double r = param_method;
+            double m = 1, maxM = 0, M;
 
-            funcValues.Add(function(left_range_x));
-            funcValues.Add(function(right_range_x));
+            double R, maxR = 0;
+            int maxIR = 0;
 
-            do
+            Point left_range_point = new Point(left_range_x, function(left_range_x));
+            Point right_range_point = new Point(right_range_x, function(right_range_x));
+            points_list.Add(left_range_point);
+            points_list.Add(right_range_point);
+
+            result.min_y = left_range_point.y;
+            result.min_x = left_range_point.x;
+            if (left_range_point.y > right_range_point.y)
             {
-                characteristics.Clear();
-                funcValues.Clear();
-                List<double> p = new List<double>();
+                result.min_y = right_range_point.y;
+                result.min_x = right_range_point.x;
+            }
 
-                for (int it = 0; it < points.Count; ++it)
-                    p.Add(points[it]);
+            for (int i = 1; i < num_of_iterations - 1; ++i)
+            {
+                points_list.Sort((left, right) => left.x.CompareTo(right.x));
 
-                for (int i = 0; i < p.Count; i++)
-                    funcValues.Add(function(p[i]));
-
-                for (int i = 0; i < points.Count - 1; i++)
+                for (int j = 1; j <= i; ++j)
                 {
-                    p.Clear();
-
-                    for (int it = 0; it != points.Count; ++it)
-                        p.Add(points[it]);
-
-                    double M = 0.0;
-
-                    for (int j = 0; j < points.Count - 1; ++j)
+                    M = (Math.Abs(points_list[j].y - points_list[j - 1].y)) / (points_list[j].x - points_list[j - 1].x);
+                    if (M > maxM)
                     {
-                        double deltaZ = Math.Abs(funcValues[j + 1] - funcValues[j]);
-                        double deltaX = p[j + 1] - p[j];
-                        double newM = deltaZ / deltaX;
-
-                        if (newM > M)
-                            M = newM;
+                        maxM = M;
                     }
-                    mParam = M > 0 ? rParam * M : 1;
-                    double r = 0.5 * (mParam * (p[i + 1] - p[i]) - funcValues[i + 1] - funcValues[i]);
-                    characteristics.Add(r);
                 }
 
-                prevArgValue = currArgValue;
-
-                p.Clear();
-
-                int index = 0;
-
-                for (int i = 0; i < characteristics.Count; i++)
+                if (maxM > 0)
                 {
-                    if (characteristics[i] > characteristics[index])
-                        index = i;
+                    m = r * maxM;
                 }
 
-                for (int it =0; it < points.Count; ++it)
-                    p.Add(points[it]);
+                maxR = 0;
+                maxIR = 1;
+                for (int j = 1; j <= i; ++j)
+                {
+                    R = (m * (points_list[j].x - points_list[j - 1].x) - (points_list[j].y + points_list[j - 1].y)) / 2;
 
-                currArgValue = 0.5 * (p[index + 1] + p[index] - (funcValues[index + 1] - funcValues[index]) / mParam);
+                    if (R > maxR)
+                    {
+                        maxR = R;
+                        maxIR = j;
+                    }
+                }
 
-                points.Add(currArgValue);
-                points.Sort();
+                result.accuracy = Math.Abs(points_list[maxIR].x - points_list[maxIR - 1].x);
+                if (result.accuracy < accuracy)
+                {
+                    break;
+                }
 
-                result.stop_iteration++;
-                result.accuracy = Math.Abs(currArgValue - prevArgValue);
-            } while (result.accuracy > accuracy && result.stop_iteration < num_of_iterations);
+                Point newPoint = new Point();
+                newPoint.x = 0.5 * (points_list[maxIR].x + points_list[maxIR - 1].x)
+                           - 0.5 * (points_list[maxIR].y - points_list[maxIR - 1].y) / m;
+                newPoint.y = function(newPoint.x);
+                points_list.Add(newPoint);
+                points_chart.Series[1].Points.AddXY(newPoint.x, 6);
 
-
+                if (newPoint.y < result.min_y)
+                {
+                    result.min_y = newPoint.y;
+                    result.min_x = newPoint.x;
+                }
+                result.stop_iteration = i;
+            }
 
             return result;
         }
